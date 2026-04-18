@@ -1,4 +1,6 @@
-# 🚀 Rick and Morty Character Explorer
+# Citadel Character Atlas
+
+Citadel Character Atlas is a character browser built on the Rick and Morty API, with search, filters, pagination, localization, and detail views.
 
 A responsive Next.js app that browses characters from the Rick and Morty GraphQL API with fast search, filters, pagination, and a detail drawer.
 
