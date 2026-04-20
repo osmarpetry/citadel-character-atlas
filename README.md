@@ -4,7 +4,7 @@ Citadel Character Atlas is a character browser built on the Rick and Morty API, 
 
 A responsive Next.js app that browses characters from the Rick and Morty GraphQL API with fast search, filters, pagination, and a detail drawer.
 
-![Rick and Morty Explorer](https://img.shields.io/badge/Rick%20and%20Morty-Multiverse%20Explorer-08C952?style=for-the-badge&logo=react)
+![Citadel Character Atlas](https://img.shields.io/badge/Citadel-Character%20Atlas-08C952?style=for-the-badge&logo=react)
 ![Next.js](https://img.shields.io/badge/Next.js-15.5.3-black?style=for-the-badge&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9.2-blue?style=for-the-badge&logo=typescript)
 ![Hero UI](https://img.shields.io/badge/Hero%20UI-2.4.22-purple?style=for-the-badge)
@@ -80,7 +80,7 @@ A responsive Next.js app that browses characters from the Rick and Morty GraphQL
 ## 🗂 Project Structure
 
 ```text
-rick-et-morty/
+citadel-character-atlas/
 ├── app/
 │   ├── layout.tsx            # Root layout + providers
 │   ├── page.tsx              # Home
@@ -111,7 +111,7 @@ rick-et-morty/
 ## 🧩 Branding & SEO
 
 - Favicon: `public/favicon.svg` (SVG + ICO)
-- Navbar title: “Rick and Morty Explorer”
+- Navbar title: “Citadel Character Atlas”
 - SEO: title, Open Graph, Twitter, keywords in `app/layout.tsx`
 
 ---
@@ -127,7 +127,7 @@ rick-et-morty/
 
 ```bash
 git clone <your-repo-url>
-cd rick-et-morty
+cd citadel-character-atlas
 npm install    # or yarn / pnpm
 ```
 

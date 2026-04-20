@@ -29,13 +29,13 @@ export default function NotFound() {
                   Dimension Not Found
                 </h1>
                 <p className='text-default-500 text-lg'>
-                  This dimension doesn&apos;t exist in the multiverse. Rick must
-                  have closed this portal.
+                  This dimension doesn&apos;t exist in the atlas. The portal
+                  route may have closed.
                 </p>
               </div>
             </div>
 
-            {/* Rick and Morty themed explanation */}
+            {/* Citadel themed explanation */}
             <Card className='bg-default-50 dark:bg-default-100/50'>
               <CardBody className='p-6'>
                 <div className='space-y-4 text-left'>
@@ -47,14 +47,9 @@ export default function NotFound() {
                       • The page you&apos;re looking for has been moved to
                       another dimension
                     </p>
-                    <p>
-                      • Rick might have accidentally deleted it during an
-                      experiment
-                    </p>
-                    <p>
-                      • The Council of Ricks could be performing maintenance
-                    </p>
-                    <p>• Morty probably clicked the wrong button again</p>
+                    <p>• The Citadel index may have archived it</p>
+                    <p>• Atlas operators could be performing maintenance</p>
+                    <p>• The portal route might be temporarily unavailable</p>
                   </div>
                 </div>
               </CardBody>
@@ -70,7 +65,7 @@ export default function NotFound() {
                 startContent={<HomeIcon className='h-4 w-4' />}
                 variant='flat'
               >
-                Return to Earth (C-137)
+                Return to Atlas
               </Button>
               <Button
                 as={Link}
@@ -92,9 +87,8 @@ export default function NotFound() {
                     Fun Fact
                   </h4>
                   <p className='text-xs text-default-500'>
-                    In the Rick and Morty universe, there are infinite
-                    dimensions, but apparently this page isn&apos;t in any of
-                    them! 🚀
+                    The atlas tracks many dimensions, but this page isn&apos;t
+                    indexed in any of them! 🚀
                   </p>
                 </div>
               </CardBody>
@@ -103,9 +97,7 @@ export default function NotFound() {
             {/* Footer note */}
             <div className='text-xs text-default-400 space-y-1'>
               <p>Error Code: 404 - Dimension Not Found</p>
-              <p>
-                If you believe this is an error, contact the Council of Ricks
-              </p>
+              <p>If you believe this is an error, contact Citadel operators</p>
             </div>
           </CardBody>
         </Card>

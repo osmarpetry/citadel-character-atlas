@@ -1,31 +1,14 @@
 /**
  * Unit tests for SearchBar component
- * Tests input behavior, debouncing, and filter interactions
+ * Tests input behavior and filter interactions
  */
 
 import React from 'react';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import SearchBar from '@/components/molecules/SearchBar';
 import { vi } from 'vitest';
 
-// Mock the debounced callback hook
-vi.mock('@/hooks/useDebouncedCallback', () => ({
-  useDebouncedCallback: (callback: Function, delay: number) => {
-    // Return a mock that calls the callback after the delay for testing
-    return vi.fn((...args) => {
-      setTimeout(() => callback(...args), delay);
-    });
-  },
-}));
-
-// Use fake timers for debounce testing
-vi.useFakeTimers();
+const SEARCH_PLACEHOLDER = 'Search the Citadel character atlas...';
 
 describe('SearchBar Component', () => {
   const defaultProps = {
@@ -47,20 +30,13 @@ describe('SearchBar Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.clearAllTimers();
-  });
-
-  afterAll(() => {
-    vi.useRealTimers();
   });
 
   describe('Search Input', () => {
     it('should render search input with correct placeholder', () => {
       render(<SearchBar {...defaultProps} />);
 
-      const input = screen.getByPlaceholderText(
-        'Search Rick and Morty characters...'
-      );
+      const input = screen.getByPlaceholderText(SEARCH_PLACEHOLDER);
       expect(input).toBeInTheDocument();
       expect(input).toHaveAttribute('aria-label', 'Search characters');
     });
@@ -75,35 +51,26 @@ describe('SearchBar Component', () => {
     it('should update input value immediately when typing', () => {
       render(<SearchBar {...defaultProps} />);
 
-      const input = screen.getByPlaceholderText(
-        'Search Rick and Morty characters...'
-      );
+      const input = screen.getByPlaceholderText(SEARCH_PLACEHOLDER);
 
       fireEvent.change(input, { target: { value: 'rick' } });
 
       expect(input).toHaveValue('rick');
     });
 
-    it('should use debounced callback for onChange', () => {
+    it('should call onChange immediately while typing', () => {
       const mockOnChange = vi.fn();
       render(<SearchBar {...defaultProps} onChange={mockOnChange} />);
 
-      const input = screen.getByPlaceholderText(
-        'Search Rick and Morty characters...'
-      );
+      const input = screen.getByPlaceholderText(SEARCH_PLACEHOLDER);
 
-      // Type in the input
       fireEvent.change(input, { target: { value: 'rick' } });
 
-      // Input should update immediately
       expect(input).toHaveValue('rick');
-
-      // The debounced callback should be called (mocked to work synchronously for testing)
-      // We're not testing the actual debounce timing here, just that the hook is used
-      expect(mockOnChange).toBeDefined();
+      expect(mockOnChange).toHaveBeenCalledWith('rick');
     });
 
-    it('should call onClear when input is cleared', () => {
+    it('should update the input value when it is cleared', () => {
       const mockOnClear = vi.fn();
       render(
         <SearchBar {...defaultProps} value='test' onClear={mockOnClear} />
@@ -111,14 +78,12 @@ describe('SearchBar Component', () => {
 
       const input = screen.getByDisplayValue('test');
 
-      // Simulate clearing the input by setting value to empty
       fireEvent.change(input, { target: { value: '' } });
 
-      // The component should handle clearing through the handleClear function
       expect(input).toHaveValue('');
     });
 
-    it('should call onChange with empty string when onClear is not provided', () => {
+    it('should call onChange with empty string when input is cleared', () => {
       const mockOnChange = vi.fn();
       render(
         <SearchBar {...defaultProps} value='test' onChange={mockOnChange} />
@@ -130,6 +95,7 @@ describe('SearchBar Component', () => {
       fireEvent.change(input, { target: { value: '' } });
 
       expect(input).toHaveValue('');
+      expect(mockOnChange).toHaveBeenCalledWith('');
     });
   });
 
@@ -197,9 +163,7 @@ describe('SearchBar Component', () => {
     it('should sync input value with prop changes', () => {
       const { rerender } = render(<SearchBar {...defaultProps} value='' />);
 
-      const input = screen.getByPlaceholderText(
-        'Search Rick and Morty characters...'
-      );
+      const input = screen.getByPlaceholderText(SEARCH_PLACEHOLDER);
       expect(input).toHaveValue('');
 
       // Update prop value
@@ -211,9 +175,7 @@ describe('SearchBar Component', () => {
     it('should maintain local input state during typing', () => {
       render(<SearchBar {...defaultProps} value='' />);
 
-      const input = screen.getByPlaceholderText(
-        'Search Rick and Morty characters...'
-      );
+      const input = screen.getByPlaceholderText(SEARCH_PLACEHOLDER);
 
       // Type in input
       fireEvent.change(input, { target: { value: 'typing...' } });
@@ -249,7 +211,9 @@ describe('SearchBar Component', () => {
       const input = screen.getByLabelText('Search characters');
 
       // Input should be focusable
-      input.focus();
+      act(() => {
+        input.focus();
+      });
       expect(document.activeElement).toBe(input);
     });
   });

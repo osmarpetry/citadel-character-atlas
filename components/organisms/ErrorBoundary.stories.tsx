@@ -48,7 +48,7 @@ const meta: Meta<typeof ErrorBoundary> = {
     docs: {
       description: {
         component:
-          'Error boundary component that catches JavaScript errors in child components and displays a fallback UI with Rick and Morty theming. Includes error reporting, recovery mechanisms, and development-friendly error details.',
+          'Error boundary component that catches JavaScript errors in child components and displays a fallback UI with Citadel theming. Includes error reporting, recovery mechanisms, and development-friendly error details.',
       },
     },
   },
@@ -104,7 +104,7 @@ export const DefaultErrorFallback: Story = {
     docs: {
       description: {
         story:
-          'Error boundary with default fallback UI showing Rick and Morty themed error message.',
+          'Error boundary with default fallback UI showing a Citadel themed error message.',
       },
     },
   },
@@ -170,7 +170,7 @@ export const CustomErrorMessage: Story = {
   args: {
     children: (
       <ErrorThrowingComponent
-        errorMessage='The Council of Ricks has detected an anomaly in dimension C-137. Portal gun recalibration required immediately!'
+        errorMessage='Citadel operators detected an anomaly in dimension C-137. Portal index recalibration required immediately!'
         shouldThrow={true}
       />
     ),
@@ -178,8 +178,7 @@ export const CustomErrorMessage: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          'Error boundary with a custom Rick and Morty themed error message.',
+        story: 'Error boundary with a custom Citadel themed error message.',
       },
     },
   },

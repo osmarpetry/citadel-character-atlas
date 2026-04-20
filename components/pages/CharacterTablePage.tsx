@@ -7,19 +7,54 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
-import { useLazyQuery } from '@apollo/client/react';
+import { useApolloClient } from '@apollo/client/react';
 
 import { GET_CHARACTERS_TABLE } from '../../lib/graphql/queries/characterTable';
 import { useTableUrlState } from '../../hooks/useTableUrlState';
 import { useDebouncedCallback } from '../../hooks/useDebouncedCallback';
 import { useKeyboardNavigation } from '../organisms/AccessibilityEnhancements';
 import CharacterTableTemplate from '../templates/CharacterTableTemplate';
+import type {
+  FilterCharacter,
+  GetCharactersTableQuery,
+  GetCharactersTableQueryVariables,
+} from '../../src/__generated__/graphql';
 
 import { Character } from '@/types';
+
+interface QueryState {
+  loading: boolean;
+  error: string | null;
+  data: GetCharactersTableQuery | null;
+}
+
+function isAbortError(error: unknown) {
+  const maybeError = error as {
+    message?: string;
+    name?: string;
+    networkError?: { message?: string; name?: string };
+  };
+
+  return (
+    maybeError?.name === 'AbortError' ||
+    maybeError?.networkError?.name === 'AbortError' ||
+    maybeError?.message?.toLowerCase().includes('aborted') ||
+    maybeError?.networkError?.message?.toLowerCase().includes('aborted')
+  );
+}
+
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error) return error.message;
+
+  const maybeError = error as { message?: string };
+
+  return maybeError?.message || 'Unable to fetch characters';
+}
 
 export function CharacterTablePage() {
   // Enable keyboard navigation
   useKeyboardNavigation();
+  const apolloClient = useApolloClient();
 
   // Use the URL state management hook
   const {
@@ -40,95 +75,209 @@ export function CharacterTablePage() {
 
   // Local state for immediate UI updates
   const [filterValue, setFilterValue] = useState(urlSearchValue);
+  const [querySearchValue, setQuerySearchValue] = useState(urlSearchValue);
+  const [queryState, setQueryState] = useState<QueryState>({
+    loading: false,
+    error: null,
+    data: null,
+  });
 
-  // Track previous values to prevent unnecessary re-executions
-  const prevValuesRef = useRef({ currentPage, filter: null });
+  const activeRequestRef = useRef<AbortController | null>(null);
+  const requestGenerationRef = useRef(0);
+  const latestInputRef = useRef(urlSearchValue);
+  const pendingSearchUrlSyncRef = useRef(false);
+  const setSearchRef = useRef(setSearch);
 
-  // Sync local state with URL state
   useEffect(() => {
+    setSearchRef.current = setSearch;
+  }, [setSearch]);
+
+  // Sync local state with URL state, without letting stale router updates undo typing.
+  useEffect(() => {
+    if (
+      pendingSearchUrlSyncRef.current &&
+      urlSearchValue !== latestInputRef.current
+    ) {
+      return;
+    }
+
+    pendingSearchUrlSyncRef.current = false;
+    latestInputRef.current = urlSearchValue;
     setFilterValue(urlSearchValue);
+    setQuerySearchValue(urlSearchValue);
   }, [urlSearchValue]);
 
-  // Debounced function to update URL (and trigger API calls)
-  const debouncedSetSearch = useDebouncedCallback(setSearch, 500);
+  const commitSearch = useCallback((value: string) => {
+    setQuerySearchValue(value);
+    setSearchRef.current(value);
+  }, []);
+
+  // Debounced function to commit the value that drives URL and API calls.
+  const debouncedCommitSearch = useDebouncedCallback(commitSearch, 100);
 
   // Handle search input changes
   const handleSearchChange = useCallback(
     (value: string) => {
-      // Update UI immediately
+      if (value === latestInputRef.current) return;
+
+      latestInputRef.current = value;
+      pendingSearchUrlSyncRef.current = true;
       setFilterValue(value);
-      // Update URL (and trigger API) after debounce delay
-      debouncedSetSearch(value);
+      activeRequestRef.current?.abort();
+      activeRequestRef.current = null;
+      requestGenerationRef.current += 1;
+      debouncedCommitSearch(value);
     },
-    [debouncedSetSearch]
+    [debouncedCommitSearch]
   );
 
   // Track if we're waiting for debounced search
-  const isSearchPending = filterValue !== urlSearchValue;
+  const isSearchPending = filterValue !== querySearchValue;
+
+  const statusServerFilter =
+    statusFilter.length === 1 ? statusFilter[0] : undefined;
+  const genderServerFilter =
+    genderFilter.length === 1 ? genderFilter[0] : undefined;
+  const speciesServerFilter =
+    speciesFilter.length === 1 ? speciesFilter[0] : undefined;
 
   // Build filter object for GraphQL query (server-side filtering)
   const filter = useMemo(() => {
-    const filterObj: any = {};
+    const filterObj: FilterCharacter = {};
 
-    // Use URL search value for API calls (this is already debounced)
-    if (urlSearchValue) {
-      filterObj.name = urlSearchValue;
+    // Use the debounced query value for API calls.
+    if (querySearchValue) {
+      filterObj.name = querySearchValue;
     }
 
     // Use server-side filtering for single selections
-    if (statusFilter.length === 1) {
-      filterObj.status = statusFilter[0];
+    if (statusServerFilter) {
+      filterObj.status = statusServerFilter;
     }
-    if (genderFilter.length === 1) {
-      filterObj.gender = genderFilter[0];
+    if (genderServerFilter) {
+      filterObj.gender = genderServerFilter;
     }
-    if (speciesFilter.length === 1) {
-      filterObj.species = speciesFilter[0];
+    if (speciesServerFilter) {
+      filterObj.species = speciesServerFilter;
     }
 
     return Object.keys(filterObj).length > 0 ? filterObj : undefined;
-  }, [urlSearchValue, statusFilter, genderFilter, speciesFilter]);
+  }, [
+    querySearchValue,
+    statusServerFilter,
+    genderServerFilter,
+    speciesServerFilter,
+  ]);
 
-  // Use lazy query for better control over when to fetch
-  const [executeQueryFn, { loading, error, data }] = useLazyQuery(
-    GET_CHARACTERS_TABLE,
-    {
-      fetchPolicy: 'cache-first', // Use cache first to prevent unnecessary fetches
-      errorPolicy: 'all',
-      notifyOnNetworkStatusChange: true,
-    }
+  const queryVariables = useMemo<GetCharactersTableQueryVariables>(
+    () => ({
+      page: currentPage,
+      filter,
+    }),
+    [currentPage, filter]
   );
 
-  // Stable execute query function to prevent infinite loops
-  const executeQuery = useCallback(
-    (variables: { page: number; filter: any }) => {
-      executeQueryFn({ variables });
-    },
-    [executeQueryFn]
+  const variablesKey = useMemo(
+    () => JSON.stringify(queryVariables),
+    [queryVariables]
   );
 
-  // Execute query when dependencies change (HeroUI async pagination pattern)
+  // Execute query when debounced query variables change.
   useEffect(() => {
-    // Stringify filter for comparison since it's an object
-    const filterString = JSON.stringify(filter);
-    const prevFilterString = JSON.stringify(prevValuesRef.current.filter);
+    activeRequestRef.current?.abort();
+    activeRequestRef.current = null;
+    const generation = requestGenerationRef.current + 1;
 
-    // Only execute if values have actually changed
-    if (
-      prevValuesRef.current.currentPage !== currentPage ||
-      prevFilterString !== filterString
-    ) {
-      prevValuesRef.current = { currentPage, filter };
+    requestGenerationRef.current = generation;
 
-      executeQuery({
-        page: currentPage,
-        filter,
+    const cached = apolloClient.readQuery<
+      GetCharactersTableQuery,
+      GetCharactersTableQueryVariables
+    >({
+      query: GET_CHARACTERS_TABLE,
+      variables: queryVariables,
+    });
+
+    if (cached) {
+      setQueryState({
+        loading: false,
+        error: null,
+        data: cached,
       });
+
+      return;
     }
-  }, [currentPage, filter, executeQuery]);
+
+    const controller = new AbortController();
+
+    activeRequestRef.current = controller;
+    setQueryState(prevState => ({
+      ...prevState,
+      loading: true,
+      error: null,
+    }));
+
+    apolloClient
+      .query<GetCharactersTableQuery, GetCharactersTableQueryVariables>({
+        query: GET_CHARACTERS_TABLE,
+        variables: queryVariables,
+        fetchPolicy: 'network-only',
+        errorPolicy: 'all',
+        context: {
+          fetchOptions: {
+            signal: controller.signal,
+          },
+        },
+      })
+      .then(result => {
+        if (
+          generation !== requestGenerationRef.current ||
+          controller.signal.aborted
+        ) {
+          return;
+        }
+
+        setQueryState({
+          loading: false,
+          error:
+            result.errors?.map(queryError => queryError.message).join(', ') ||
+            null,
+          data: result.data,
+        });
+      })
+      .catch(queryError => {
+        if (
+          generation !== requestGenerationRef.current ||
+          controller.signal.aborted ||
+          isAbortError(queryError)
+        ) {
+          return;
+        }
+
+        setQueryState(prevState => ({
+          ...prevState,
+          loading: false,
+          error: getErrorMessage(queryError),
+        }));
+      })
+      .finally(() => {
+        if (generation === requestGenerationRef.current) {
+          activeRequestRef.current = null;
+        }
+      });
+  }, [apolloClient, queryVariables, variablesKey]);
+
+  useEffect(() => {
+    return () => {
+      activeRequestRef.current?.abort();
+      requestGenerationRef.current += 1;
+    };
+  }, []);
 
   // Transform API data to component format
   const characters: Character[] = useMemo(() => {
+    const data = queryState.data;
+
     if (!data?.characters?.results) return [];
 
     let transformedCharacters = data.characters.results
@@ -181,10 +330,10 @@ export function CharacterTablePage() {
     }
 
     return transformedCharacters;
-  }, [data, statusFilter, genderFilter, speciesFilter]);
+  }, [queryState.data, statusFilter, genderFilter, speciesFilter]);
 
   // Get pagination info
-  const totalPages = data?.characters?.info?.pages || 1;
+  const totalPages = queryState.data?.characters?.info?.pages || 1;
 
   // Find selected character for drawer
   const selectedCharacterData = selectedCharacter
@@ -212,11 +361,11 @@ export function CharacterTablePage() {
     <CharacterTableTemplate
       characters={characters}
       currentPage={currentPage}
-      error={error?.message || null}
+      error={queryState.error}
       filterValue={filterValue}
       genderFilter={genderFilter}
       isSearchPending={isSearchPending}
-      loading={loading}
+      loading={queryState.loading}
       selectedCharacter={selectedCharacter}
       selectedCharacterData={selectedCharacterData}
       statusFilter={statusFilter}

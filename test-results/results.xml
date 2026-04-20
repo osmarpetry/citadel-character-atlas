@@ -1,0 +1,16 @@
+<testsuites id="" name="" tests="6" failures="0" skipped="0" errors="0" time="14.552947">
+<testsuite name="character-flow.spec.ts" timestamp="2026-04-20T20:43:07.615Z" hostname="chromium" tests="6" failures="0" skipped="0" time="50.975" errors="0">
+<testcase name="Character Flow - Essential Tests › should load characters from API and display in table" classname="character-flow.spec.ts" time="8.818">
+</testcase>
+<testcase name="Character Flow - Essential Tests › should navigate to page 2 via pagination" classname="character-flow.spec.ts" time="8.79">
+</testcase>
+<testcase name="Character Flow - Essential Tests › should search for &quot;rick&quot; and find Rick Sanchez" classname="character-flow.spec.ts" time="11.449">
+</testcase>
+<testcase name="Character Flow - Essential Tests › should keep mobile empty state centered above bottom pagination" classname="character-flow.spec.ts" time="8.815">
+</testcase>
+<testcase name="Character Flow - Essential Tests › should keep desktop empty state centered above bottom pagination" classname="character-flow.spec.ts" time="8.841">
+</testcase>
+<testcase name="Character Flow - Essential Tests › should ignore stale GraphQL responses after fast search changes" classname="character-flow.spec.ts" time="4.262">
+</testcase>
+</testsuite>
+</testsuites>

@@ -21,8 +21,8 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   keywords: [
     'Rick and Morty',
-    'Rick & Morty',
-    'Character Explorer',
+    'Rick and Morty API',
+    'Citadel Character Atlas',
     'Next.js',
     'GraphQL',
     'Apollo Client',
@@ -83,7 +83,7 @@ export default async function RootLayout({
                   <div className='mx-auto max-w-6xl px-4 sm:px-6 py-4 flex items-center justify-between'>
                     <div className='flex items-center gap-3'>
                       <h1 className='text-large font-semibold tracking-tight'>
-                        Rick and Morty Explorer
+                        Citadel Character Atlas
                       </h1>
                     </div>
                     <div className='flex items-center gap-3'>
@@ -104,7 +104,7 @@ export default async function RootLayout({
               <footer className='border-t border-default-200 flex-shrink-0'>
                 <div className='mx-auto max-w-6xl px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4'>
                   <p className='text-tiny text-foreground-500 text-center sm:text-left'>
-                    Explore the multiverse with Rick & Morty characters • Built
+                    Browse the Citadel character atlas across dimensions • Built
                     with Next.js & GraphQL
                   </p>
                   <div className='flex items-center'>

@@ -1,9 +1,9 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: 'Rick and Morty Explorer',
+  name: 'Citadel Character Atlas',
   description:
-    'Explore Rick and Morty characters with search, filters, pagination, and detailed drawers. Built with Next.js, TypeScript, Tailwind CSS, Hero UI, and Apollo Client.',
+    'Browse the Citadel Character Atlas powered by the Rick and Morty API, with search, filters, pagination, localization, and detailed drawers.',
   navItems: [
     {
       label: 'Home',

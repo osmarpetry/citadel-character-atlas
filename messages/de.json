@@ -1,13 +1,13 @@
 {
   "navigation": {
-    "title": "Rick & Morty",
+    "title": "Citadel Atlas",
     "home": "Startseite",
     "characters": "Charaktere",
     "episodes": "Episoden",
     "locations": "Orte"
   },
   "characters": {
-    "title": "Rick und Morty Charaktere",
+    "title": "Citadel Character Atlas",
     "loading": "Charaktere werden geladen...",
     "loadingTitle": "Multiversum wird gescannt",
     "loadingSubtitle": "Suche nach Charakteren in verschiedenen Dimensionen...",
@@ -21,7 +21,7 @@
     "search": "Charaktere suchen...",
     "searchAriaLabel": "Charaktere nach Namen suchen",
     "searchHelpText": "Tippen Sie, um nach Charakteren zu suchen. Ergebnisse werden während der Eingabe angezeigt.",
-    "tableAriaLabel": "Rick und Morty Charaktere-Tabelle mit Paginierung und Filterung",
+    "tableAriaLabel": "Citadel-Charaktertabelle mit Paginierung und Filterung",
     "noCharactersFound": "Keine Charaktere gefunden, die Ihren Suchkriterien entsprechen",
     "skipToMain": "Zum Hauptinhalt springen",
     "status": "Status",

@@ -1,5 +1,5 @@
 /**
- * Rick and Morty Design System
+ * Citadel Character Atlas Design System
  * Visual documentation of the theme colors, components, and design tokens
  */
 
@@ -10,13 +10,13 @@ import { Chip } from '@heroui/chip';
 import { Button } from '@heroui/button';
 
 const meta: Meta = {
-  title: 'Design System/Rick and Morty Theme',
+  title: 'Design System/Citadel Theme',
   parameters: {
     layout: 'fullscreen',
     docs: {
       description: {
         component:
-          "Complete design system showcasing the Rick and Morty color palette, components, and theming based on the show's iconic colors.",
+          'Complete design system showcasing the Citadel color palette, components, and portal-forward atlas theming.',
       },
     },
   },
@@ -29,7 +29,7 @@ type Story = StoryObj<typeof meta>;
 const ColorPalette = () => (
   <div className='p-8 space-y-8'>
     <div>
-      <h2 className='text-2xl font-bold mb-4'>Rick and Morty Color Palette</h2>
+      <h2 className='text-2xl font-bold mb-4'>Citadel Color Palette</h2>
       <p className='text-default-600 mb-6'>
         Based on the color palette from{' '}
         <a
@@ -67,11 +67,9 @@ const ColorPalette = () => (
       </div>
     </div>
 
-    {/* Secondary Colors - Rick's Hair Yellow */}
+    {/* Secondary Colors - Citadel Yellow */}
     <div>
-      <h3 className='text-xl font-semibold mb-3'>
-        Secondary - Rick's Hair Yellow (Official)
-      </h3>
+      <h3 className='text-xl font-semibold mb-3'>Secondary - Citadel Yellow</h3>
       <div className='grid grid-cols-2 md:grid-cols-5 gap-4'>
         <div className='text-center'>
           <div className='w-16 h-16 bg-secondary-500 rounded-lg mx-auto mb-2 border-2 border-default-200' />
@@ -91,11 +89,9 @@ const ColorPalette = () => (
       </div>
     </div>
 
-    {/* Danger Colors - Rick's Lab Coat Red */}
+    {/* Danger Colors - Signal Red */}
     <div>
-      <h3 className='text-xl font-semibold mb-3'>
-        Danger - Rick's Lab Coat Red (Official)
-      </h3>
+      <h3 className='text-xl font-semibold mb-3'>Danger - Signal Red</h3>
       <div className='grid grid-cols-2 md:grid-cols-5 gap-4'>
         <div className='text-center'>
           <div className='w-16 h-16 bg-danger-500 rounded-lg mx-auto mb-2 border-2 border-default-200' />
@@ -243,10 +239,10 @@ export const FullDesignSystem: Story = {
     <div>
       <div className='bg-gradient-to-r from-primary/10 via-secondary/10 to-danger/10 p-8 text-center'>
         <h1 className='text-4xl font-bold mb-4 bg-gradient-to-r from-primary via-secondary to-danger bg-clip-text text-transparent'>
-          🚀 Rick and Morty Design System
+          🚀 Citadel Character Atlas Design System
         </h1>
         <p className='text-xl text-default-600'>
-          Wubba Lubba Dub Dub! A complete design system inspired by the
+          A complete design system for tracking characters across the
           multiverse.
         </p>
       </div>

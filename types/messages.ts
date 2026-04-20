@@ -164,14 +164,14 @@ export function validateMessages(messages: unknown): messages is Messages {
 // Default messages (English) - used as fallback
 export const defaultMessages: Messages = {
   navigation: {
-    title: 'Rick & Morty',
+    title: 'Citadel Atlas',
     home: 'Home',
     characters: 'Characters',
     episodes: 'Episodes',
     locations: 'Locations',
   },
   characters: {
-    title: 'Rick and Morty Characters',
+    title: 'Citadel Character Atlas',
     loading: 'Loading characters...',
     loadingTitle: 'Scanning the Multiverse',
     loadingSubtitle: 'Searching for characters across dimensions...',
@@ -186,8 +186,7 @@ export const defaultMessages: Messages = {
     searchAriaLabel: 'Search characters by name',
     searchHelpText:
       'Type to search for characters. Results will appear as you type.',
-    tableAriaLabel:
-      'Rick and Morty characters table with pagination and filtering',
+    tableAriaLabel: 'Citadel character table with pagination and filtering',
     noCharactersFound: 'No characters found matching your search criteria',
     skipToMain: 'Skip to main content',
     status: 'Status',

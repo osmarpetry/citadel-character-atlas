@@ -119,7 +119,7 @@ const meta: Meta<typeof CharacterTable> = {
     docs: {
       description: {
         component:
-          'Character table component displaying Rick and Morty characters with pagination, loading states, error handling, and responsive design. Features avatar images, status indicators, and interactive row selection.',
+          'Character table component displaying Citadel atlas characters with pagination, loading states, error handling, and responsive design. Features avatar images, status indicators, and interactive row selection.',
       },
     },
   },
@@ -178,7 +178,7 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Default character table with sample Rick and Morty characters.',
+        story: 'Default character table with sample Citadel atlas characters.',
       },
     },
   },
@@ -211,7 +211,7 @@ export const Error: Story = {
     docs: {
       description: {
         story:
-          'Character table displaying an error message with Rick and Morty theming.',
+          'Character table displaying an error message with Citadel theming.',
       },
     },
   },

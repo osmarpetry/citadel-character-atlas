@@ -24,11 +24,11 @@ This will start Storybook on `http://localhost:6006` where you can:
 npm run build-storybook
 ```
 
-## 🎨 Rick and Morty Theme Integration
+## 🎨 Citadel Theme Integration
 
-Our Storybook is fully integrated with the Rick and Morty design system:
+Our Storybook is fully integrated with the Citadel Character Atlas design system:
 
-- **Custom Theme**: Rick and Morty color palette from [color-hex.com/color-palette/9134](https://www.color-hex.com/color-palette/9134)
+- **Custom Theme**: Citadel color palette derived from portal-forward atlas colors
 - **Theme Toggle**: Light/Dark mode switching in toolbar
 - **Internationalization**: Stories support EN/DE/FR locales
 - **Responsive Testing**: All stories are responsive-ready
@@ -43,7 +43,7 @@ Our Storybook is fully integrated with the Rick and Morty design system:
 
 ### Design System
 
-- **Color Palette**: Complete Rick and Morty color documentation
+- **Color Palette**: Complete Citadel color documentation
 - **Component Showcase**: All themed components in action
 - **Full Design System**: Comprehensive design system overview
 
@@ -102,12 +102,12 @@ Or set it as a GitHub secret: `CHROMATIC_PROJECT_TOKEN`
 - **Apollo Client**: Fully mocked with `MockedProvider`
 - **Loading States**: Simulated loading spinners
 - **Error States**: Error handling visualization
-- **Character Data**: Rick and Morty character mocks
+- **Character Data**: Citadel character mocks
 
 ### Accessibility Testing
 
 - **Built-in a11y addon**: Automatic accessibility checks
-- **Color contrast**: Rick and Morty theme accessibility validation
+- **Color contrast**: Citadel theme accessibility validation
 - **Keyboard navigation**: Focus management testing
 
 ### Responsive Testing
@@ -156,7 +156,7 @@ chromatic.config.json    # Chromatic configuration
 
 ### Accessibility
 
-1. **Color contrast**: Ensure Rick and Morty colors meet WCAG standards
+1. **Color contrast**: Ensure Citadel colors meet WCAG standards
 2. **Focus management**: Test keyboard navigation
 3. **Screen readers**: Verify ARIA labels and descriptions
 
@@ -205,4 +205,4 @@ npm run chromatic
 
 ---
 
-**Wubba Lubba Dub Dub!** 🚀 Your Rick and Morty components are now ready for interdimensional visual testing!
+**Citadel systems online.** 🚀 Your atlas components are now ready for interdimensional visual testing!

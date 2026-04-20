@@ -80,8 +80,8 @@ function DefaultErrorFallback({
                 Portal Malfunction!
               </h2>
               <p className='text-default-500 text-sm'>
-                The multiverse connection is unstable. Rick&apos;s portal gun
-                needs recalibration.
+                The atlas connection is unstable. The portal index needs
+                recalibration.
               </p>
             </div>
           </div>
@@ -121,7 +121,7 @@ function DefaultErrorFallback({
               variant='flat'
               onPress={resetError}
             >
-              Recalibrate Portal
+              Recalibrate Index
             </Button>
             <Button
               className='font-medium'
@@ -134,8 +134,7 @@ function DefaultErrorFallback({
           </div>
 
           <div className='text-xs text-default-400'>
-            If the problem persists, the Council of Ricks may need to
-            investigate.
+            If the problem persists, Citadel operators may need to investigate.
           </div>
         </CardBody>
       </Card>
@@ -167,8 +166,8 @@ export function CharacterTableErrorFallback({
                 Character Database Error
               </h2>
               <p className='text-default-500'>
-                The Rick and Morty character database is experiencing
-                interdimensional interference.
+                The Citadel character atlas is experiencing interdimensional
+                interference.
               </p>
             </div>
           </div>
@@ -206,7 +205,7 @@ export function CharacterTableErrorFallback({
               variant='light'
               onPress={() => window.location.reload()}
             >
-              Reload Universe
+              Reload Atlas
             </Button>
           </div>
 
@@ -214,8 +213,8 @@ export function CharacterTableErrorFallback({
             <p>This might be caused by:</p>
             <ul className='text-left space-y-1'>
               <li>• Interdimensional portal interference</li>
-              <li>• Council of Ricks maintenance</li>
-              <li>• Morty&apos;s latest experiment gone wrong</li>
+              <li>• Citadel index maintenance</li>
+              <li>• Atlas synchronization drift</li>
             </ul>
           </div>
         </CardBody>

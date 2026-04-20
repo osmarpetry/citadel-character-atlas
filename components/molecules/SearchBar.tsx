@@ -3,8 +3,6 @@ import { Input } from '@heroui/input';
 import { Select, SelectItem } from '@heroui/select';
 import { Icon } from '@iconify/react';
 
-import { useDebouncedCallback } from '@/hooks/useDebouncedCallback';
-
 interface SearchBarProps {
   value: string;
   statusValues: string[];
@@ -28,9 +26,23 @@ export default function SearchBar({
   onGenderChange,
   onColumnsChange,
 }: SearchBarProps) {
+  const idPrefix = React.useId();
   const [inputValue, setInputValue] = useState(value);
-
-  const debouncedOnChange = useDebouncedCallback(onChange, 500);
+  const statusValuesKey = statusValues.join('\u0000');
+  const genderValuesKey = genderValues.join('\u0000');
+  const columnValuesKey = columnValues.join('\u0000');
+  const statusSelectedKeys = React.useMemo(
+    () => new Set(statusValues),
+    [statusValuesKey]
+  );
+  const genderSelectedKeys = React.useMemo(
+    () => new Set(genderValues),
+    [genderValuesKey]
+  );
+  const columnSelectedKeys = React.useMemo(
+    () => new Set(columnValues),
+    [columnValuesKey]
+  );
 
   useEffect(() => {
     setInputValue(value);
@@ -38,7 +50,7 @@ export default function SearchBar({
 
   const handleInputChange = (newValue: string) => {
     setInputValue(newValue);
-    debouncedOnChange(newValue);
+    onChange(newValue);
   };
 
   const handleClear = () => {
@@ -46,7 +58,7 @@ export default function SearchBar({
     if (onClear) {
       onClear();
     } else {
-      onChange(''); // Immediate API call for clear
+      onChange('');
     }
   };
 
@@ -61,7 +73,8 @@ export default function SearchBar({
             inputWrapper: 'h-14 min-h-14', // 56px height
             input: 'h-14',
           }}
-          placeholder='Search Rick and Morty characters...'
+          id={`${idPrefix}-character-search`}
+          placeholder='Search the Citadel character atlas...'
           size='md'
           startContent={
             <Icon
@@ -84,9 +97,10 @@ export default function SearchBar({
           aria-label='Filter by status'
           className='w-full'
           classNames={{ trigger: 'h-14 min-h-14' }} // 56px height
+          id={`${idPrefix}-status-filter`}
           label='Status'
           placeholder='All'
-          selectedKeys={new Set(statusValues)}
+          selectedKeys={statusSelectedKeys}
           selectionMode='multiple'
           size='md'
           onSelectionChange={keys =>
@@ -103,9 +117,10 @@ export default function SearchBar({
           aria-label='Filter by gender'
           className='w-full'
           classNames={{ trigger: 'h-14 min-h-14' }} // 56px height
+          id={`${idPrefix}-gender-filter`}
           label='Gender'
           placeholder='All'
-          selectedKeys={new Set(genderValues)}
+          selectedKeys={genderSelectedKeys}
           selectionMode='multiple'
           size='md'
           onSelectionChange={keys =>
@@ -123,9 +138,10 @@ export default function SearchBar({
           aria-label='Visible columns'
           className='w-full'
           classNames={{ trigger: 'h-14 min-h-14' }} // 56px height
+          id={`${idPrefix}-columns-filter`}
           label='Columns'
           placeholder='Choose'
-          selectedKeys={new Set(columnValues)}
+          selectedKeys={columnSelectedKeys}
           selectionMode='multiple'
           size='md'
           onSelectionChange={keys =>

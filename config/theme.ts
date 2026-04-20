@@ -1,17 +1,17 @@
 /**
- * Rick and Morty Theme Configuration for Hero UI
- * Based on official Rick and Morty title screen colors
+ * Citadel Theme Configuration for Hero UI
+ * Based on portal-forward Citadel atlas colors
  * Following Hero UI theme structure: https://www.heroui.com/docs/customization/theme
  *
- * Official Rick and Morty Colors:
+ * Citadel Atlas Colors:
  * - #08C952 (8,201,82) - Portal Green (Primary - Science/Adventure)
- * - #FCE46D (252,228,108) - Rick's Hair Yellow (Secondary - Bright/Optimistic)
- * - #A1140A (160,19,9) - Rick's Lab Coat Red (Danger - Action/Warning)
+ * - #FCE46D (252,228,108) - Citadel Yellow (Secondary - Bright/Optimistic)
+ * - #A1140A (160,19,9) - Signal Red (Danger - Action/Warning)
  * - #160440 (21,3,63) - Deep Space Purple (Dark backgrounds)
- * - #EDCF6B (237,206,106) - Morty's Shirt Yellow (Warning/Accent)
+ * - #EDCF6B (237,206,106) - Citadel Amber (Warning/Accent)
  */
 
-const rickAndMortyLight = {
+const citadelLight = {
   extend: 'light',
   colors: {
     // Primary - Portal Green (#08C952)
@@ -29,7 +29,7 @@ const rickAndMortyLight = {
       DEFAULT: '#08C952',
       foreground: '#ffffff',
     },
-    // Secondary - Rick's Hair Yellow (#FCE46D)
+    // Secondary - Citadel Yellow (#FCE46D)
     secondary: {
       50: '#fefce8',
       100: '#fef9c3',
@@ -59,7 +59,7 @@ const rickAndMortyLight = {
       DEFAULT: '#08C952',
       foreground: '#ffffff',
     },
-    // Warning - Morty's Shirt Yellow (#EDCF6B)
+    // Warning - Citadel Amber (#EDCF6B)
     warning: {
       50: '#fefce8',
       100: '#fef9c3',
@@ -74,7 +74,7 @@ const rickAndMortyLight = {
       DEFAULT: '#EDCF6B',
       foreground: '#160440',
     },
-    // Danger - Rick's Lab Coat Red (#A1140A)
+    // Danger - Signal Red (#A1140A)
     danger: {
       50: '#fef2f2',
       100: '#fee2e2',
@@ -96,7 +96,7 @@ const rickAndMortyLight = {
     content2: '#f8fafc',
     content3: '#f1f5f9',
     content4: '#e2e8f0',
-    // Default - Neutral with Rick and Morty accent
+    // Default - Neutral with Citadel accent
     default: {
       50: '#f8fafc',
       100: '#f1f5f9',
@@ -120,7 +120,7 @@ const rickAndMortyLight = {
   },
 };
 
-const rickAndMortyDark = {
+const citadelDark = {
   extend: 'dark',
   colors: {
     // Primary - Portal Green (#08C952) - Brighter for dark mode
@@ -138,7 +138,7 @@ const rickAndMortyDark = {
       DEFAULT: '#08C952',
       foreground: '#000000',
     },
-    // Secondary - Rick's Hair Yellow (#FCE46D) - Bright for dark mode
+    // Secondary - Citadel Yellow (#FCE46D) - Bright for dark mode
     secondary: {
       50: '#713f12',
       100: '#854d0e',
@@ -168,7 +168,7 @@ const rickAndMortyDark = {
       DEFAULT: '#08C952',
       foreground: '#000000',
     },
-    // Warning - Morty's Shirt Yellow (#EDCF6B)
+    // Warning - Citadel Amber (#EDCF6B)
     warning: {
       50: '#713f12',
       100: '#854d0e',
@@ -183,7 +183,7 @@ const rickAndMortyDark = {
       DEFAULT: '#EDCF6B',
       foreground: '#160440',
     },
-    // Danger - Rick's Lab Coat Red (#A1140A) - Brighter for dark mode
+    // Danger - Signal Red (#A1140A) - Brighter for dark mode
     danger: {
       50: '#7f1d1d',
       100: '#991b1b',
@@ -230,4 +230,4 @@ const rickAndMortyDark = {
 };
 
 // Export both themes for use in Tailwind config
-export { rickAndMortyLight, rickAndMortyDark };
+export { citadelLight, citadelDark };

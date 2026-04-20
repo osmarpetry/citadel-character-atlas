@@ -1,6 +1,6 @@
-# 🧪 Testing Guide - Rick and Morty Explorer
+# 🧪 Testing Guide - Citadel Character Atlas
 
-This document provides comprehensive information about the testing setup for the Rick and Morty Character Explorer application, including Storybook stories, visual regression testing, unit tests, and type safety validation.
+This document provides comprehensive information about the testing setup for the Citadel Character Atlas application, including Storybook stories, visual regression testing, unit tests, and type safety validation.
 
 ## 📋 Table of Contents
 
@@ -459,4 +459,4 @@ jobs:
 
 ---
 
-**Happy Testing! 🚀** Remember: Good tests make good code, and good code makes happy users in the multiverse! 🌌
+**Happy Testing! 🚀** Remember: Good tests make good code, and good code makes happy atlas users across dimensions! 🌌

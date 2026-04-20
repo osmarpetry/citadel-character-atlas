@@ -12,15 +12,15 @@ const meta: Meta<typeof ThemeSwitcher> = {
     docs: {
       description: {
         component:
-          'Theme switcher component that toggles between light and dark modes with Rick and Morty portal-inspired styling and smooth transitions.',
+          'Theme switcher component that toggles between light and dark modes with Citadel portal-inspired styling and smooth transitions.',
       },
     },
     backgrounds: {
       values: [
         { name: 'light', value: '#ffffff' },
         { name: 'dark', value: '#0a0a0a' },
-        { name: 'rick-green', value: '#08C952' },
-        { name: 'morty-yellow', value: '#FCE46D' },
+        { name: 'portal-green', value: '#08C952' },
+        { name: 'citadel-yellow', value: '#FCE46D' },
       ],
     },
   },
@@ -79,7 +79,7 @@ export const DarkMode: Story = {
     docs: {
       description: {
         story:
-          'Theme switcher in dark mode with Rick and Morty themed colors and icons.',
+          'Theme switcher in dark mode with Citadel themed colors and icons.',
       },
     },
   },
@@ -100,7 +100,7 @@ export const Interactive: Story = {
     docs: {
       description: {
         story:
-          'Interactive theme switcher. Click to toggle between light and dark modes and see the smooth transition with Rick and Morty portal colors.',
+          'Interactive theme switcher. Click to toggle between light and dark modes and see the smooth transition with Citadel portal colors.',
       },
     },
   },

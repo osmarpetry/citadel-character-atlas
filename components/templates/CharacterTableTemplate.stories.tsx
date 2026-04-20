@@ -210,7 +210,7 @@ export const ErrorState: Story = {
     docs: {
       description: {
         story:
-          'Template displaying error state with Rick and Morty themed error message.',
+          'Template displaying error state with Citadel themed error message.',
       },
     },
   },

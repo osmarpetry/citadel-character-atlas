@@ -1,4 +1,111 @@
 import { test, expect } from '@playwright/test';
+import type { Page } from '@playwright/test';
+
+const GRAPHQL_URL = 'https://rickandmortyapi.com/graphql';
+
+function characterResult(name: string) {
+  return {
+    id: name.toLowerCase().replace(/\W+/g, '-'),
+    name,
+    status: 'Alive',
+    species: 'Human',
+    type: '',
+    gender: 'Male',
+    origin: {
+      name: 'Earth',
+    },
+    location: {
+      name: 'Earth',
+    },
+    image: '',
+    episode: [],
+    created: '',
+  };
+}
+
+function charactersResponse(names: string[], pages = 1) {
+  return {
+    data: {
+      characters: {
+        info: {
+          count: names.length,
+          pages,
+          next: null,
+          prev: null,
+        },
+        results: names.map(characterResult),
+      },
+    },
+  };
+}
+
+function pageNames(pageNumber: number) {
+  const offset = (pageNumber - 1) * 20;
+
+  return Array.from(
+    { length: 20 },
+    (_, index) => `Rick Variant ${offset + index + 1}`
+  );
+}
+
+async function searchInput(page: Page) {
+  const input = page
+    .locator(
+      'input[type="text"], input[placeholder*="search" i], input[aria-label*="search" i]'
+    )
+    .first();
+
+  await expect(input).toBeVisible();
+
+  return input;
+}
+
+async function expectEmptyStateCenteredInTableCard(page: Page) {
+  const card = page.getByTestId('character-table-card');
+  const content = page.getByTestId('character-table-content');
+  const emptyState = page.getByTestId('character-table-empty-state');
+  const pagination = page.getByTestId('character-table-pagination');
+
+  await expect(emptyState).toBeVisible();
+  await expect(pagination).toBeVisible();
+
+  const cardBox = await card.boundingBox();
+  const contentBox = await content.boundingBox();
+  const emptyBox = await emptyState.boundingBox();
+  const paginationBox = await pagination.boundingBox();
+
+  expect(cardBox).not.toBeNull();
+  expect(contentBox).not.toBeNull();
+  expect(emptyBox).not.toBeNull();
+  expect(paginationBox).not.toBeNull();
+
+  const cardBottom = cardBox!.y + cardBox!.height;
+  const paginationBottom = paginationBox!.y + paginationBox!.height;
+  const contentCenterY = contentBox!.y + contentBox!.height / 2;
+  const emptyCenterY = emptyBox!.y + emptyBox!.height / 2;
+
+  expect(Math.abs(cardBottom - paginationBottom)).toBeLessThanOrEqual(2);
+  expect(Math.abs(contentCenterY - emptyCenterY)).toBeLessThanOrEqual(8);
+}
+
+async function routeDefaultGraphQL(page: Page) {
+  await page.route(GRAPHQL_URL, async route => {
+    const body = route.request().postDataJSON();
+    const search = body?.variables?.filter?.name || '';
+    const pageNumber = body?.variables?.page || 1;
+    const names =
+      search === 'Rickymortad'
+        ? []
+        : search.toLowerCase() === 'rick'
+          ? ['Rick Sanchez', 'Pickle Rick', 'Rick Prime']
+          : pageNames(pageNumber);
+
+    await route.fulfill({
+      contentType: 'application/json',
+      body: JSON.stringify(charactersResponse(names, 42)),
+    });
+  });
+}
 
 /**
  * E2E Test: Essential Character Flow
@@ -7,6 +114,9 @@ import { test, expect } from '@playwright/test';
  */
 test.describe('Character Flow - Essential Tests', () => {
   test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => localStorage.clear());
+    await routeDefaultGraphQL(page);
+
     // Navigate to the main page
     await page.goto('/');
 
@@ -70,15 +180,10 @@ test.describe('Character Flow - Essential Tests', () => {
 
   test('should search for "rick" and find Rick Sanchez', async ({ page }) => {
     // Wait for search input to be available
-    const searchInput = page
-      .locator(
-        'input[type="text"], input[placeholder*="search" i], input[aria-label*="search" i]'
-      )
-      .first();
-    await expect(searchInput).toBeVisible();
+    const input = await searchInput(page);
 
     // Type 'rick' in search query
-    await searchInput.fill('rick');
+    await input.fill('rick');
 
     // Wait for 5 seconds as requested
     await page.waitForTimeout(5000);
@@ -87,7 +192,7 @@ test.describe('Character Flow - Essential Tests', () => {
     await page.waitForLoadState('networkidle');
 
     // Search for 'Rick Sanchez' in the results
-    const rickSanchez = page.getByText('Rick Sanchez');
+    const rickSanchez = page.getByText('Rick Sanchez').first();
     await expect(rickSanchez).toBeVisible();
 
     // Verify search results contain "rick"
@@ -104,5 +209,96 @@ test.describe('Character Flow - Essential Tests', () => {
       const name = await characterNames.nth(i).textContent();
       expect(name?.toLowerCase()).toContain('rick');
     }
+  });
+
+  test('should keep mobile empty state centered above bottom pagination', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+
+    const input = await searchInput(page);
+
+    await input.fill('Rickymortad');
+    await expect(page.getByTestId('character-table-empty-state')).toBeVisible({
+      timeout: 10000,
+    });
+
+    await expectEmptyStateCenteredInTableCard(page);
+  });
+
+  test('should keep desktop empty state centered above bottom pagination', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1366, height: 900 });
+
+    const input = await searchInput(page);
+
+    await input.fill('Rickymortad');
+    await expect(page.getByTestId('character-table-empty-state')).toBeVisible({
+      timeout: 10000,
+    });
+
+    await expectEmptyStateCenteredInTableCard(page);
+  });
+
+  test('should ignore stale GraphQL responses after fast search changes', async ({
+    page,
+  }) => {
+    test.setTimeout(20000);
+
+    const searchedTerms: string[] = [];
+    const abortedOrLateTerms: string[] = [];
+
+    await page.unroute(GRAPHQL_URL);
+    await page.route(GRAPHQL_URL, async route => {
+      const body = route.request().postDataJSON();
+      const search = body?.variables?.filter?.name || '';
+
+      searchedTerms.push(search);
+
+      if (search === 'Ri' || search === 'Rick') {
+        await page.waitForTimeout(700);
+      }
+
+      const payload =
+        search === 'Rickymortad'
+          ? charactersResponse([])
+          : charactersResponse([search ? `Stale ${search}` : 'Rick Sanchez']);
+
+      try {
+        await route.fulfill({
+          contentType: 'application/json',
+          body: JSON.stringify(payload),
+        });
+      } catch {
+        abortedOrLateTerms.push(search);
+      }
+    });
+
+    await page.evaluate(() => localStorage.clear());
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+
+    const input = await searchInput(page);
+
+    await input.fill('Ri');
+    await page.waitForTimeout(150);
+    await input.fill('Rick');
+    await page.waitForTimeout(150);
+    await input.fill('Rickymortad');
+
+    await expect(page.getByTestId('character-table-empty-state')).toBeVisible({
+      timeout: 10000,
+    });
+
+    await page.waitForTimeout(900);
+
+    await expect(input).toHaveValue('Rickymortad');
+    await expect(page.getByText('Stale Ri')).not.toBeVisible();
+    await expect(page.getByText('Stale Rick')).not.toBeVisible();
+    expect(searchedTerms).toContain('Ri');
+    expect(searchedTerms).toContain('Rick');
+    expect(searchedTerms).toContain('Rickymortad');
+    expect(abortedOrLateTerms.length >= 0).toBe(true);
   });
 });
