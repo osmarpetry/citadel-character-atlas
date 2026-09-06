@@ -23,7 +23,7 @@
     "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN"
   },
   "dependencies": {
-    "@apollo/client": "^3.14.0",
+    "@apollo/client": "^4.2.12",
     "@heroicons/react": "^2.2.0",
     "@heroui/accordion": "2.2.29",
     "@heroui/alert": "2.2.32",
