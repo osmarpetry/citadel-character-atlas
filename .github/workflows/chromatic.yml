@@ -27,7 +27,7 @@ jobs:
         run: bun install
 
       - name: Run Chromatic
-        uses: chromaui/action@2a0b63f30233c48591844a46d451b9cf68128186 # latest
+        uses: chromaui/action@dde305686b7024ce775c69b378dfca8f4800f5d2 # latest
         with:
           # 👇 Chromatic projectToken, refer to the manage page to obtain it.
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
