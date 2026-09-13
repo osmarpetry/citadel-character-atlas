@@ -98,7 +98,7 @@
     "@next/eslint-plugin-next": "15.5.3",
     "@playwright/test": "^1.55.0",
     "@react-types/shared": "3.36.1",
-    "@storybook/addon-a11y": "^9.1.7",
+    "@storybook/addon-a11y": "^10.6.0",
     "@storybook/addon-docs": "^9.1.7",
     "@storybook/addon-onboarding": "^9.1.7",
     "@storybook/addon-vitest": "^10.6.0",
