@@ -116,7 +116,7 @@
     "@vitest/browser": "3.2.4",
     "@vitest/coverage-v8": "5.0.0",
     "chromatic": "^18.7.2",
-    "eslint": "^9.35.0",
+    "eslint": "^10.10.0",
     "eslint-config-next": "16.3.4",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-import": "2.32.0",
