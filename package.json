@@ -129,7 +129,7 @@
     "eslint-plugin-unused-imports": "4.4.1",
     "globals": "16.4.0",
     "jsdom": "^27.0.0",
-    "npm-check-updates": "^18.2.1",
+    "npm-check-updates": "^23.1.0",
     "playwright": "^1.55.0",
     "postcss": "8.5.28",
     "prettier": "3.9.6",
